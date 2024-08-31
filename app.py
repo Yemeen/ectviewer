@@ -63,7 +63,7 @@ with left_column:
     data_option = st.radio("Choose data source:", ["Example dataset", "Upload your own"])
 
     if data_option == "Example dataset":
-        example_shapes = ["Circle", "Square", "Triangle", "Two Moons", "Random"]
+        example_shapes = [ "Square","Circle", "Triangle", "Two Moons", "Random"]
         selected_shape = st.selectbox("Select an example shape:", example_shapes)
         n_points = st.slider("Number of points", min_value=50, max_value=500, value=100, step=50)
         st.session_state.data = generate_sample_data(selected_shape, n_points)
@@ -88,7 +88,6 @@ with right_column:
     if st.session_state.data is not None and 'apply_ect' in st.session_state and st.session_state.apply_ect:
         myect, M = process_ect(st.session_state.data, num_dirs, num_thresh)
         
-        
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
         G = EmbeddedGraph()
         G.add_cycle(st.session_state.data)
@@ -96,16 +95,11 @@ with right_column:
         G.plot(ax=ax1, with_labels=False, node_size=10)
         ax1.set_title("Original Shape")
         
-        
-        im = ax2.imshow(M, aspect='auto', extent=[0, 2*np.pi, -1, 1])
+        myect.plotECT()
         ax2.set_title("Euler Characteristic Transform")
-        ax2.set_xlabel("Angle")
-        ax2.set_ylabel("Threshold")
-        plt.colorbar(im, ax=ax2)
         
         st.pyplot(fig)
 
-        
         fig, ax = plt.subplots(figsize=(8, 6))
         myect.plotSECT()
         ax.set_title("Smooth Euler Characteristic Transform")
